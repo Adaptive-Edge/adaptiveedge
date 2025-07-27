@@ -87,15 +87,17 @@ export default function ToolsSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -4 }}
+                whileHover={{ y: -4, scale: 1.02 }}
                 className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <ToolWrapper {...wrapperProps}>
-                  <div
+                  <motion.div
                     className={`w-12 h-12 ${tool.color} rounded-xl flex items-center justify-center mb-4`}
+                    whileHover={{ rotate: 360, scale: 1.1 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <tool.icon className="text-white" size={20} />
-                  </div>
+                  </motion.div>
                   <h3 className="text-xl font-serif font-bold text-navy mb-3">
                     {tool.title}
                   </h3>

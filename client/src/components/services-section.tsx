@@ -62,14 +62,16 @@ export default function ServicesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
               viewport={{ once: true }}
-              whileHover={{ y: -8 }}
+              whileHover={{ y: -8, scale: 1.02 }}
               className="bg-gray-50 p-8 rounded-2xl hover:shadow-xl transition-all duration-300"
             >
-              <div
+              <motion.div
                 className={`w-16 h-16 ${service.color} rounded-2xl flex items-center justify-center mb-6`}
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.5 }}
               >
                 <service.icon className="text-white" size={24} />
-              </div>
+              </motion.div>
               <h3 className="text-2xl font-serif font-bold text-navy mb-4">
                 {service.title}
               </h3>

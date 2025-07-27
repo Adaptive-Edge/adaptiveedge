@@ -163,7 +163,7 @@ export default function ContactSection() {
               <Button
                 type="submit"
                 disabled={submitContact.isPending}
-                className="bg-coral text-white px-12 py-4 rounded-full text-lg font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 inline-flex items-center"
+                className="bg-coral text-white px-12 py-4 rounded-full text-lg font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 inline-flex items-center pulse-glow"
               >
                 <span>
                   {submitContact.isPending ? "Sending..." : "Start the Conversation"}

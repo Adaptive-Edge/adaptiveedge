@@ -37,10 +37,12 @@ export default function AboutSection() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <img
+            <motion.img
               src="/assets/nathan-photo.png"
               alt="Nathan Waterhouse, Founder of Adaptive Edge"
-              className="asymmetric-image shadow-2xl w-full max-w-md mx-auto"
+              className="asymmetric-image shadow-2xl w-full max-w-md mx-auto transition-transform duration-300 hover:scale-105"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
             />
 
             <div className="mt-8 text-center">

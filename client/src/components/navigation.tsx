@@ -56,14 +56,18 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8 items-center">
-            {navItems.map((item) => (
-              <button
+            {navItems.map((item, index) => (
+              <motion.button
                 key={item.id}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 onClick={() => scrollToSection(item.id)}
-                className="text-warm-gray hover:text-coral transition-colors duration-300"
+                className="text-warm-gray hover:text-coral transition-colors duration-300 relative group"
               >
                 {item.label}
-              </button>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-coral transition-all duration-300 group-hover:w-full"></span>
+              </motion.button>
             ))}
             <button
               onClick={() => scrollToSection("contact")}

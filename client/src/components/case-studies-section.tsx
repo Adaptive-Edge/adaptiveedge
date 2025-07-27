@@ -65,10 +65,12 @@ export default function CaseStudiesSection() {
               }`}
             >
               <div className={index % 2 === 1 ? "md:order-2" : ""}>
-                <img
+                <motion.img
                   src={study.image}
                   alt={study.title}
-                  className={`shadow-lg w-full ${index % 2 === 0 ? 'asymmetric-image' : 'asymmetric-image-alt'}`}
+                  className={`shadow-lg w-full transition-transform duration-300 hover:scale-105 ${index % 2 === 0 ? 'asymmetric-image' : 'asymmetric-image-alt'}`}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
                 />
               </div>
               <div className={index % 2 === 1 ? "md:order-1" : ""}>

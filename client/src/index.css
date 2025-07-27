@@ -148,4 +148,80 @@
   .asymmetric-image-alt {
     border-radius: 2rem 0 2rem 2rem;
   }
+  
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .pulse-glow {
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+  
+  @keyframes pulseGlow {
+    0%, 100% { 
+      box-shadow: 0 0 20px rgba(255, 102, 102, 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 30px rgba(255, 102, 102, 0.5);
+    }
+  }
+  
+  .text-shimmer {
+    background: linear-gradient(90deg, hsl(224, 76%, 32%), hsl(7, 100%, 67%), hsl(224, 76%, 32%));
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+  
+  @keyframes shimmer {
+    to {
+      background-position: 200% center;
+    }
+  }
+  
+  .floating-element {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  .staggered-fade {
+    animation: staggeredFade 0.8s ease-out forwards;
+  }
+  
+  @keyframes staggeredFade {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 }

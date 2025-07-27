@@ -24,7 +24,7 @@ export default function HeroSection() {
         >
           <h1 className="text-5xl md:text-7xl font-serif font-bold text-navy mb-6 leading-tight">
             Helping organisations{" "}
-            <span className="text-coral">thrive</span> in complexity
+            <span className="text-shimmer">thrive</span> in complexity
           </h1>
           <p className="text-xl md:text-2xl text-warm-gray mb-8 max-w-3xl mx-auto leading-relaxed">
             Through strategy, design, and AI, we unlock collective intelligence
