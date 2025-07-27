@@ -51,30 +51,47 @@ export default function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Floating Elements */}
-        <motion.div
-          animate={{
-            y: [0, -10, 0],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-20 right-10 w-20 h-20 bg-light-coral rounded-full opacity-60 hidden lg:block"
-        />
-        <motion.div
-          animate={{
-            y: [0, -10, 0],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-          className="absolute bottom-32 left-16 w-16 h-16 bg-navy opacity-20 rounded-full hidden lg:block"
-        />
+        {/* Murmuration Animation */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none hidden lg:block">
+          {Array.from({ length: 15 }).map((_, i) => {
+            const size = Math.random() > 0.5 ? 'w-2 h-2' : 'w-1.5 h-1.5';
+            const color = Math.random() > 0.6 ? 'bg-coral' : 'bg-navy';
+            const opacity = Math.random() > 0.5 ? 'opacity-20' : 'opacity-30';
+            const startX = 100 + Math.random() * 800;
+            const startY = 100 + Math.random() * 400;
+            
+            return (
+              <motion.div
+                key={i}
+                className={`absolute ${size} ${color} rounded-full ${opacity}`}
+                initial={{
+                  x: startX,
+                  y: startY,
+                }}
+                animate={{
+                  x: [
+                    startX,
+                    startX + (Math.random() - 0.5) * 300,
+                    startX + (Math.random() - 0.5) * 400,
+                    startX,
+                  ],
+                  y: [
+                    startY,
+                    startY + (Math.random() - 0.5) * 200,
+                    startY + (Math.random() - 0.5) * 300,
+                    startY,
+                  ],
+                }}
+                transition={{
+                  duration: 12 + Math.random() * 8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3,
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
 
       {/* Scroll Indicator */}
