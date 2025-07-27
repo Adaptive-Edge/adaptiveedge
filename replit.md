@@ -2,7 +2,13 @@
 
 ## Overview
 
-This is a modern, full-stack web application for Adaptive Edge, a strategy and innovation consultancy. The application is built using a monorepo structure with a React frontend, Express.js backend, and PostgreSQL database using Drizzle ORM. It features a clean, minimal design with subtle animations that reflects the company's collaborative, forward-thinking, and AI-native approach.
+This is a modern, full-stack web application for Adaptive Edge, a strategy and innovation consultancy. The application is built using a monorepo structure with a React frontend, Express.js backend, and PostgreSQL database using Drizzle ORM. It features a clean, minimal design with coral/navy branding, subtle animations, and asymmetric image styling that reflects the company's collaborative, forward-thinking, and AI-native approach.
+
+## Recent Changes
+
+- **January 27, 2025**: Fixed CSS import order and restored vibrant coral/navy brand colors
+- **January 27, 2025**: Added asymmetric image styling with non-curved corners for visual interest
+- **January 27, 2025**: Applied asymmetric styling to profile and case study images
 
 ## User Preferences
 
