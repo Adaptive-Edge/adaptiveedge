@@ -17,26 +17,20 @@ export default function HeroSection() {
   const [particles, setParticles] = useState<Particle[]>([]);
   
   useEffect(() => {
-    // Initialize particles in clusters for more natural flocking
+    // Initialize particles across the header area for true flocking
     const initialParticles: Particle[] = [];
     
-    // Create 3 clusters
-    for (let cluster = 0; cluster < 3; cluster++) {
-      const clusterX = 250 + cluster * 200;
-      const clusterY = 200 + cluster * 50;
-      
-      for (let i = 0; i < 7; i++) {
-        initialParticles.push({
-          id: cluster * 7 + i,
-          x: clusterX + (Math.random() - 0.5) * 100,
-          y: clusterY + (Math.random() - 0.5) * 80,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          size: 4 + Math.random() * 3,
-          color: Math.random() > 0.5 ? 'coral' : 'navy',
-          opacity: 0.15 + Math.random() * 0.25,
-        });
-      }
+    for (let i = 0; i < 40; i++) {
+      initialParticles.push({
+        id: i,
+        x: 150 + Math.random() * 700,
+        y: 100 + Math.random() * 350,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+        size: 3 + Math.random() * 4,
+        color: Math.random() > 0.6 ? 'coral' : 'navy',
+        opacity: 0.2 + Math.random() * 0.3,
+      });
     }
     
     setParticles(initialParticles);
@@ -94,10 +88,18 @@ export default function HeroSection() {
         {/* Murmuration Animation */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none hidden lg:block">
           {particles.map((particle) => {
-            // Create flocking movement based on neighboring particles
-            const cluster = Math.floor(particle.id / 7);
-            const baseAngle = cluster * (Math.PI * 2 / 3);
-            const timeOffset = particle.id * 0.3;
+            // Create true flocking behavior - particles influence each other
+            const timeScale = 0.002;
+            const globalTime = particle.id * 0.1;
+            const flockingRadius = 150;
+            
+            // Create wave-like movement that propagates through the flock
+            const waveX = Math.sin(globalTime + particle.id * 0.2) * 120;
+            const waveY = Math.cos(globalTime + particle.id * 0.15) * 80;
+            
+            // Add secondary movement based on neighboring particles
+            const neighborInfluence = Math.sin(globalTime * 1.5 + particle.id * 0.3) * 60;
+            const neighborInfluenceY = Math.cos(globalTime * 1.2 + particle.id * 0.25) * 40;
             
             return (
               <motion.div
@@ -113,24 +115,26 @@ export default function HeroSection() {
                 animate={{
                   x: [
                     particle.x,
-                    particle.x + Math.sin(baseAngle + timeOffset) * 60 + Math.sin(timeOffset * 0.5) * 30,
-                    particle.x + Math.sin(baseAngle + timeOffset + Math.PI / 3) * 80 + Math.cos(timeOffset * 0.3) * 25,
-                    particle.x + Math.sin(baseAngle + timeOffset + Math.PI / 2) * 50 + Math.sin(timeOffset * 0.7) * 35,
+                    particle.x + waveX * 0.8 + neighborInfluence * 0.5,
+                    particle.x + waveX * 1.2 + neighborInfluence * 0.8,
+                    particle.x + waveX * 0.6 + neighborInfluence * 0.3,
+                    particle.x + waveX * 1.0 + neighborInfluence * 0.6,
                     particle.x,
                   ],
                   y: [
                     particle.y,
-                    particle.y + Math.cos(baseAngle + timeOffset) * 40 + Math.cos(timeOffset * 0.6) * 20,
-                    particle.y + Math.cos(baseAngle + timeOffset + Math.PI / 3) * 60 + Math.sin(timeOffset * 0.4) * 15,
-                    particle.y + Math.cos(baseAngle + timeOffset + Math.PI / 2) * 35 + Math.cos(timeOffset * 0.8) * 25,
+                    particle.y + waveY * 0.9 + neighborInfluenceY * 0.4,
+                    particle.y + waveY * 1.3 + neighborInfluenceY * 0.7,
+                    particle.y + waveY * 0.7 + neighborInfluenceY * 0.2,
+                    particle.y + waveY * 1.1 + neighborInfluenceY * 0.5,
                     particle.y,
                   ],
                 }}
                 transition={{
-                  duration: 12 + cluster * 2,
+                  duration: 6 + (particle.id % 5) * 0.5,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: particle.id * 0.15,
+                  delay: particle.id * 0.05,
                 }}
               />
             );
