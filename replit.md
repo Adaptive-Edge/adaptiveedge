@@ -6,6 +6,9 @@ This is a modern, full-stack web application for Adaptive Edge, a strategy and i
 
 ## Recent Changes
 
+- **January 27, 2025**: Implemented playful cursor interaction with bird-like movement
+- **January 27, 2025**: Enhanced murmuration animation with true emergent flocking behavior
+- **January 27, 2025**: Added GitHub-ready documentation and project structure
 - **January 27, 2025**: Fixed CSS import order and restored vibrant coral/navy brand colors
 - **January 27, 2025**: Added asymmetric image styling with non-curved corners for visual interest
 - **January 27, 2025**: Applied asymmetric styling to profile and case study images
@@ -31,7 +34,10 @@ The application follows a modern full-stack architecture with clear separation b
 - **Components**: Modular React components with shadcn/ui integration
 - **Pages**: Single-page application with home and 404 pages
 - **Styling**: Tailwind CSS with custom brand colors (coral and navy theme)
-- **Animation**: Framer Motion for smooth, engaging interactions
+- **Animation**: Framer Motion for smooth, engaging interactions including:
+  - Hero murmuration with emergent flocking behavior (40 particles)
+  - Interactive cursor birds that follow mouse movement
+  - Hover effects and micro-interactions throughout
 - **Forms**: React Hook Form with Zod validation
 
 ### Backend Structure
