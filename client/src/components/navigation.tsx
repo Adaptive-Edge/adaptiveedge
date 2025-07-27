@@ -44,10 +44,14 @@ export default function Navigation() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-2xl font-serif font-bold text-navy cursor-pointer"
+            className="cursor-pointer"
             onClick={() => scrollToSection("home")}
           >
-            Adaptive Edge
+            <img
+              src="/assets/adaptive-edge-logo.png"
+              alt="Adaptive Edge"
+              className="h-10 w-auto"
+            />
           </motion.div>
 
           {/* Desktop Navigation */}

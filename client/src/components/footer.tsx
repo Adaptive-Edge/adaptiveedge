@@ -13,7 +13,11 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <div className="text-2xl font-serif font-bold mb-4">Adaptive Edge</div>
+            <img
+              src="/assets/adaptive-edge-logo.png"
+              alt="Adaptive Edge"
+              className="h-12 w-auto mb-4 brightness-0 invert"
+            />
             <p className="text-gray-300 leading-relaxed">
               Strategy & Innovation Consultancy helping organizations thrive in
               complexity through collaborative, AI-native approaches.

@@ -38,7 +38,7 @@ export default function AboutSection() {
             viewport={{ once: true }}
           >
             <img
-              src="/attached_assets/6be8f6b6-49eb-4d8c-be78-376a40be0839_1753610110144.png"
+              src="/assets/nathan-photo.png"
               alt="Nathan Waterhouse, Founder of Adaptive Edge"
               className="asymmetric-image shadow-2xl w-full max-w-md mx-auto"
             />
