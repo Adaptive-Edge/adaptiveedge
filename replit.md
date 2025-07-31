@@ -6,6 +6,7 @@ This is a modern, full-stack web application for Adaptive Edge, a strategy and i
 
 ## Recent Changes
 
+- **January 30, 2025**: Created upload guide for existing GitHub repository (natcrypto/adaptiveedge)
 - **January 28, 2025**: Prepared complete GitHub repository with documentation and deployment guides
 - **January 28, 2025**: Created comprehensive DigitalOcean deployment instructions for adaptiveedge.uk
 - **January 28, 2025**: Set up PostgreSQL database for production deployment  
