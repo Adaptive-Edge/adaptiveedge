@@ -113,7 +113,7 @@ Your repository will contain:
 
 Your contact form uses this database (already working):
 ```
-postgresql://neondb_owner:npg_5aq6TngFCYBQ@ep-dawn-glitter-a2x9eun2.eu-central-1.aws.neon.tech/neondb?sslmode=require
+postgresql://neondb_owner:npg_jdUDQE71gJMp@ep-fragrant-bird-abgfwjpo-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
 ```
 
 The deployment guide includes this connection string for your server setup.

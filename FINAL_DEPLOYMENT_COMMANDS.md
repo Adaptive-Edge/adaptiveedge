@@ -33,7 +33,7 @@ git clone https://github.com/yourusername/adaptive-edge-website.git
 ```bash
 cd /var/www/adaptive-edge-website
 cat > .env << 'EOF'
-DATABASE_URL=postgresql://neondb_owner:npg_5aq6TngFCYBQ@ep-dawn-glitter-a2x9eun2.eu-central-1.aws.neon.tech/neondb?sslmode=require
+DATABASE_URL=postgresql://neondb_owner:npg_jdUDQE71gJMp@ep-fragrant-bird-abgfwjpo-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
 NODE_ENV=production
 PORT=5000
 EOF
