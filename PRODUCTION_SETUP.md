@@ -1,117 +1,214 @@
-# Production Setup for adaptiveedge.uk
+# Production Setup for DigitalOcean Droplet
 
-## Database Integration Complete! ✅
+## Complete Deployment Commands
 
-Your Adaptive Edge website is now ready for production deployment with full database support.
+### Prerequisites
+- DigitalOcean Droplet with Ubuntu 22.04
+- Domain (adaptiveedge.uk) pointing to droplet IP
+- GitHub repository connected
 
-## What's Been Set Up
-
-✅ **PostgreSQL Database**: Production-ready database with contact form storage  
-✅ **Database Schema**: Tables created for users and contacts  
-✅ **API Integration**: Contact form now saves to database permanently  
-✅ **Production Build**: Optimized files ready for deployment  
-✅ **Environment Variables**: Database connection configured  
-
-## Deployment Options for adaptiveedge.uk
-
-### Option 1: Full-Stack Deployment (Recommended)
-**Best for**: Complete functionality including contact form
-
-**Requirements:**
-- Server with Node.js 18+ support
-- PostgreSQL database access
-- Domain pointing to your server
-
-**Files to Upload:**
-- All project files (entire repository)
-- Set environment variables on your server
-
-**Steps:**
-1. Upload all files to your server
-2. Set `DATABASE_URL` environment variable
-3. Run: `npm install && npm run build && npm start`
-4. Set up process manager (PM2) for production
-
-### Option 2: Frontend-Only Deployment
-**Best for**: Simple hosting without contact form functionality
-
-**Files to Upload:**
-- Contents of `dist/public/` folder only
-- Upload to your domain's web root (public_html/)
-
-## Environment Variables for Production
-
-Your server needs these environment variables:
-
+### 1. Server Setup
 ```bash
-DATABASE_URL=postgresql://username:password@host:port/database
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install Node.js 18
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Install PM2 and Nginx
+sudo npm install -g pm2
+sudo apt install nginx -y
+
+# Install Git (if not already installed)
+sudo apt install git -y
+```
+
+### 2. Clone and Setup Project
+```bash
+# Create web directory
+sudo mkdir -p /var/www
+cd /var/www
+
+# Clone your repository
+sudo git clone https://github.com/natcrypto/adaptiveedge.git
+sudo chown -R $USER:$USER /var/www/adaptiveedge
+cd adaptiveedge
+
+# Install dependencies
+npm install
+```
+
+### 3. Environment Configuration
+```bash
+# Create production environment file
+cat > .env << 'EOF'
+DATABASE_URL=postgresql://neondb_owner:npg_jdUDQE71gJMp@ep-fragrant-bird-abgfwjpo-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+SENDGRID_API_KEY=SG.your_actual_sendgrid_api_key_here
 NODE_ENV=production
 PORT=5000
+EOF
+
+# Make sure to replace 'SG.your_actual_sendgrid_api_key_here' with your real SendGrid API key
 ```
 
-## Database Connection Details
+### 4. Database Setup
+```bash
+# Push database schema
+npm run db:push
 
-The database has been configured with:
-- **Host**: Your database server
-- **Tables**: `users` and `contacts` 
-- **Contact Form**: Stores name, email, company, message with timestamps
-- **Data Persistence**: All contact submissions permanently saved
-
-## Testing the Setup
-
-I've already tested the database integration:
-- ✅ Contact form submissions work
-- ✅ Data is stored with unique IDs and timestamps  
-- ✅ API endpoints respond correctly
-- ✅ Database queries are optimized
-
-## GitHub Sync Process
-
-Since you mentioned using GitHub sync:
-
-1. **Push to GitHub:**
-   ```bash
-   git add .
-   git commit -m "Add database integration for production"
-   git push origin main
-   ```
-
-2. **Pull on your server:**
-   ```bash
-   git pull origin main
-   npm install
-   npm run build
-   npm start
-   ```
-
-## File Structure Ready for Production
-
-```
-dist/
-├── public/              ← Frontend files (407KB JS, 62KB CSS)
-│   ├── index.html       ← Entry point
-│   └── assets/          ← Optimized CSS/JS
-└── index.js             ← Backend server (7.9KB)
+# Verify database connection
+node -e "
+const { db } = require('./dist/server/db.js');
+console.log('Database connection test...');
+"
 ```
 
-## Features Working in Production
+### 5. Build and Start Application
+```bash
+# Build the application
+npm run build
 
-✅ **Murmuration Animation**: Beautiful flocking behavior in hero  
-✅ **Cursor Birds**: Interactive cursor followers on desktop  
-✅ **Contact Form**: Full database integration  
-✅ **Responsive Design**: Works on all devices  
-✅ **Fast Loading**: Optimized build (under 500KB total)  
-✅ **SEO Ready**: Proper meta tags and structure  
+# Start with PM2
+pm2 start dist/index.js --name adaptive-edge
 
-## Next Steps
+# Save PM2 configuration
+pm2 startup
+pm2 save
 
-1. **Upload to adaptiveedge.uk** using your preferred method
-2. **Set environment variables** on your server
-3. **Test contact form** on your live domain
-4. **Set up SSL certificate** for HTTPS (recommended)
+# Check status
+pm2 status
+pm2 logs adaptive-edge
+```
 
-The website is production-ready! Your contact form will now permanently store all submissions in the database.
+### 6. Nginx Configuration
+```bash
+# Create Nginx configuration
+sudo tee /etc/nginx/sites-available/adaptive-edge << 'EOF'
+server {
+    listen 80;
+    server_name adaptiveedge.uk www.adaptiveedge.uk;
 
-## Support
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_buffering off;
+    }
+}
+EOF
 
-If you need help with deployment specifics for your hosting provider, I can provide detailed instructions based on your server setup (cPanel, VPS, cloud hosting, etc.).
+# Enable the site
+sudo ln -s /etc/nginx/sites-available/adaptive-edge /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+### 7. SSL Certificate with Let's Encrypt
+```bash
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx -y
+
+# Get SSL certificate
+sudo certbot --nginx -d adaptiveedge.uk -d www.adaptiveedge.uk
+
+# Test auto-renewal
+sudo certbot renew --dry-run
+```
+
+### 8. Firewall Configuration
+```bash
+# Configure UFW firewall
+sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx Full'
+sudo ufw --force enable
+sudo ufw status
+```
+
+### 9. Testing Your Deployment
+
+#### Test the application
+```bash
+# Check if application is running
+curl http://localhost:5000
+
+# Test contact form
+curl -X POST http://localhost:5000/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Production Test","email":"test@example.com","company":"Adaptive Edge","message":"Testing production deployment"}'
+```
+
+#### Test with your domain
+```bash
+# Test website
+curl https://adaptiveedge.uk
+
+# Test contact form via domain
+curl -X POST https://adaptiveedge.uk/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Domain Test","email":"nathan@adaptiveedge.uk","company":"Adaptive Edge","message":"Testing live domain"}'
+```
+
+### 10. Monitoring and Maintenance
+
+#### Check application status
+```bash
+pm2 status
+pm2 logs adaptive-edge
+pm2 monit
+```
+
+#### Update deployment
+```bash
+cd /var/www/adaptiveedge
+git pull origin main
+npm install
+npm run build
+pm2 restart adaptive-edge
+```
+
+#### Check system resources
+```bash
+htop
+df -h
+free -h
+```
+
+### 11. Backup Strategy
+```bash
+# Database backups (if needed locally)
+pg_dump $DATABASE_URL > backup_$(date +%Y%m%d).sql
+
+# Code backups (Git handles this)
+git log --oneline -10
+```
+
+## Expected Result
+
+After successful deployment:
+- **Website**: https://adaptiveedge.uk (with SSL)
+- **Contact Form**: Saves to PostgreSQL database
+- **Email Notifications**: Sent to nathan@adaptiveedge.uk
+- **User Confirmations**: Professional branded emails
+- **Animations**: Murmuration and cursor birds working
+- **Performance**: Fast loading with Nginx proxy
+
+## Troubleshooting
+
+### Common Issues:
+1. **Port 5000 in use**: `sudo lsof -i :5000` then kill process
+2. **Database connection**: Check DATABASE_URL format
+3. **Email not sending**: Verify SENDGRID_API_KEY is correct
+4. **Nginx errors**: Check `sudo nginx -t` and logs
+5. **PM2 not starting**: Check `pm2 logs adaptive-edge`
+
+### Log Locations:
+- Application logs: `pm2 logs adaptive-edge`
+- Nginx logs: `/var/log/nginx/error.log`
+- System logs: `journalctl -u nginx`
