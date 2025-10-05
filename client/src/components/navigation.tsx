@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -6,7 +7,9 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [location] = useLocation();
   const isMobile = useIsMobile();
+  const isHomePage = location === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +21,10 @@ export default function Navigation() {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    if (!isHomePage) {
+      window.location.href = `/#${sectionId}`;
+      return;
+    }
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -26,11 +33,11 @@ export default function Navigation() {
   };
 
   const navItems = [
-    { label: "Home", id: "home" },
-    { label: "About", id: "about" },
-    { label: "Services", id: "services" },
-    { label: "Tools", id: "tools" },
-    { label: "Case Studies", id: "case-studies" },
+    { label: "Home", id: "home", isSection: true },
+    { label: "About", id: "about", isSection: true },
+    { label: "Services", id: "services", isSection: true },
+    { label: "Tools", id: "tools", isSection: true },
+    { label: "Work", href: "/work", isSection: false },
   ];
 
   return (
@@ -57,21 +64,40 @@ export default function Navigation() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8 items-center">
             {navItems.map((item, index) => (
-              <motion.button
-                key={item.id}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                onClick={() => scrollToSection(item.id)}
-                className="text-warm-gray hover:text-coral transition-colors duration-300 relative group"
-              >
-                {item.label}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-coral transition-all duration-300 group-hover:w-full"></span>
-              </motion.button>
+              item.isSection ? (
+                <motion.button
+                  key={item.id}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  onClick={() => scrollToSection(item.id!)}
+                  className="text-warm-gray hover:text-coral transition-colors duration-300 relative group"
+                  data-testid={`nav-${item.label.toLowerCase()}`}
+                >
+                  {item.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-coral transition-all duration-300 group-hover:w-full"></span>
+                </motion.button>
+              ) : (
+                <Link key={item.label} href={item.href!}>
+                  <a>
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="text-warm-gray hover:text-coral transition-colors duration-300 relative group cursor-pointer"
+                      data-testid={`nav-${item.label.toLowerCase()}`}
+                    >
+                      {item.label}
+                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-coral transition-all duration-300 group-hover:w-full"></span>
+                    </motion.div>
+                  </a>
+                </Link>
+              )
             ))}
             <button
               onClick={() => scrollToSection("contact")}
               className="bg-coral text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-all duration-300"
+              data-testid="nav-contact"
             >
               Contact
             </button>
@@ -99,13 +125,21 @@ export default function Navigation() {
           >
             <div className="mt-4 space-y-4">
               {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="block w-full text-left text-warm-gray hover:text-coral transition-colors duration-300"
-                >
-                  {item.label}
-                </button>
+                item.isSection ? (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id!)}
+                    className="block w-full text-left text-warm-gray hover:text-coral transition-colors duration-300"
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <Link key={item.label} href={item.href!}>
+                    <a className="block w-full text-left text-warm-gray hover:text-coral transition-colors duration-300">
+                      {item.label}
+                    </a>
+                  </Link>
+                )
               ))}
               <button
                 onClick={() => scrollToSection("contact")}
