@@ -5,6 +5,7 @@ import { caseStudies } from "@shared/caseStudiesData";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { useEffect } from "react";
+import { updatePageMetadata } from "@/lib/seo";
 
 export default function CaseStudyPage() {
   const { slug } = useParams();
@@ -12,7 +13,18 @@ export default function CaseStudyPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [slug]);
+    
+    if (caseStudy) {
+      updatePageMetadata({
+        title: `${caseStudy.title} | Adaptive Edge`,
+        description: caseStudy.challenge,
+        ogTitle: `${caseStudy.title} - ${caseStudy.client}`,
+        ogDescription: caseStudy.challenge,
+        ogImage: caseStudy.image,
+        ogUrl: `https://adaptiveedge.uk/work/${caseStudy.slug}`,
+      });
+    }
+  }, [slug, caseStudy]);
 
   if (!caseStudy) {
     return (

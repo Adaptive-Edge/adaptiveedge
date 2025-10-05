@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { caseStudies } from "@shared/caseStudiesData";
@@ -7,9 +7,22 @@ import { CASE_STUDY_CATEGORIES } from "@shared/types";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { ArrowRight } from "lucide-react";
+import { updatePageMetadata } from "@/lib/seo";
 
 export default function WorkPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
+  useEffect(() => {
+    updatePageMetadata({
+      title: "Our Work | Adaptive Edge",
+      description:
+        "Real transformations with global organizations including Sky, Freudenberg, Sandvik Coromant, and AstraZeneca. Work delivered in partnership with Treehouse Innovation.",
+      ogTitle: "Work We've Been Part Of - Adaptive Edge",
+      ogDescription:
+        "Strategic transformation, innovation design, and capability building projects with Fortune 500 companies and innovative organizations.",
+      ogUrl: "https://adaptiveedge.uk/work",
+    });
+  }, []);
 
   const categories = ["All", ...CASE_STUDY_CATEGORIES];
 
