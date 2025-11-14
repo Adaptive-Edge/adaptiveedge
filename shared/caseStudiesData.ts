@@ -105,7 +105,7 @@ Virtual workshops were run to brainstorm improvements, then 50 people—includin
     role: 'Patient-centered design collaborator with Treehouse Innovation and Experience Point, contributing to research design, facilitating sensitive patient conversations, and translating insights into actionable improvements.',
     featured: true,
     treeHouseAttribution: 'Work delivered in partnership with Treehouse Innovation and Experience Point',
-    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800',
+    image: '/attached_assets/image_1763107634262.png',
   },
   {
     slug: 'astrazeneca-human-centered-design',
