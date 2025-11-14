@@ -1,0 +1,85 @@
+Adaptive Edge Website Design Brief
+
+Overview
+
+Adaptive Edge is a strategy and innovation consultancy that helps organisations and leaders thrive in uncertainty by unlocking collective intelligence, driving purposeful innovation, and building adaptive capacity. We blend systems thinking, design, facilitation, and AI to create strategies that teams feel true ownership of – increasing the likelihood of successful implementation.
+
+The site should reflect this collaborative, forward-thinking, AI-native approach with a clean, minimal, and original design. It should feel engaging and human, with subtle animations to bring it to life without being overwhelming. The tone should be modern, smart, and approachable.
+
+⸻
+
+Goals for the Site
+	1.	Present Adaptive Edge as a fresh, unique consultancy with a distinctive way of working.
+	2.	Showcase our services, tools, and past work in a way that feels credible and differentiated.
+	3.	Make it easy for potential clients to get in touch or start a conversation.
+	4.	Convey that we are AI-native, collaborative, and deeply strategic.
+
+⸻
+
+Target Audience
+	•	Senior leaders and decision-makers in ambitious, values-led organisations navigating complexity or change.
+	•	Companies exploring strategy, innovation, or AI adoption.
+	•	Prospects seeking a partner who works with them rather than presenting solutions in isolation.
+
+⸻
+
+Design Style
+	•	Minimal, modern, and bold, with moments of playfulness through subtle animations or interactions.
+	•	Typography: Preference for Helvetica/Neue Haas Grotesk for clarity, paired with a clean serif like Jansen or similar for headlines.
+	•	Colour palette: Inspired by Adaptive Edge’s coral chameleon and navy brand colours. Use white space generously.
+	•	Feel: Creative, refreshing, but trustworthy. It should stand apart from typical consultancy websites.
+
+⸻
+
+Key Messaging / Unique Approach
+
+We don’t take the problem away and return with a PowerPoint. We co-create strategies with client teams, doing the heavy lifting while making them feel like creators of the strategy. Our interactive workshops use the “Ikea effect”, increasing ownership and implementation success.
+
+We are also an AI-native consultancy – we leverage AI tools for deeper, broader research and interactive outputs that go beyond static deliverables.
+
+⸻
+
+Site Structure
+
+1. Home
+	•	Hero statement: Helping organisations thrive in complexity through strategy, design, and AI.
+	•	A short description of Adaptive Edge’s purpose and value proposition.
+	•	Links to Services, Tools, and Case Studies.
+
+2. About
+	•	Adaptive Edge’s story and mission.
+	•	Nathan’s bio and background (IDEO, Treehouse Innovation, global clients).
+	•	What makes Adaptive Edge unique (collaborative, AI-native approach).
+
+3. Services
+	•	Strategy & Innovation (Strategic planning, portfolio innovation, new business/brand models)
+	•	Adaptive Organisations (Team alignment, culture shaping, systems thinking workshops)
+	•	AI-Enabled Capability Building (AI adoption workshops, embedding AI, tools for long-term capacity)
+
+4. Tools
+	•	Showcase of unique frameworks like the IMPACT Prompting Framework, Operational Excellence Cards, and the Innovation Priorities Card Game.
+	•	Highlight how Adaptive Edge uses AI-powered tools to support clients.
+
+5. Case Studies
+	•	Frame as “Work we’ve been part of” – including projects from Treehouse and IDEO with clear descriptions of Nathan’s role.
+	•	Use anonymised or thematic stories if client confidentiality is a concern.
+
+6. Contact
+	•	Simple form with name, email, company, message.
+	•	A creative CTA like “Let’s shape what’s next together.”
+
+⸻
+
+Functional Requirements
+	•	Responsive design for desktop, tablet, and mobile.
+	•	Smooth navigation with a sticky header.
+	•	Animations (e.g., text fade-ins, icon transitions, hover effects).
+	•	Case study template for future additions.
+	•	Blog integration (with Substack feed embedded or styled consistently with the main site).
+
+⸻
+
+Tone and Content Style
+	•	Concise, clear copy that balances professionalism with creativity.
+	•	Storytelling elements in case studies.
+	•	Avoid stock or overly corporate imagery. Use simple illustrations, line art, or abstract patterns inspired by the chameleon/AI theme.
