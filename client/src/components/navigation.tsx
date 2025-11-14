@@ -38,6 +38,7 @@ export default function Navigation() {
     { label: "Services", id: "services", isSection: true },
     { label: "Tools", id: "tools", isSection: true },
     { label: "Work", href: "/work", isSection: false },
+    { label: "Blog", href: "/blog", isSection: false },
   ];
 
   return (
