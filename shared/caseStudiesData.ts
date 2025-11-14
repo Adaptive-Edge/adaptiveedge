@@ -119,10 +119,27 @@ Working with Treehouse Innovation, a series of two-day workshops were run with t
 
 Through conversations with supply chain colleagues, the team gathered invaluable human insight: people playing key roles in getting medication to patients weren't being considered early enough in the process. This led to logistical issues and blame for delays that could have been avoided through earlier engagement. It became clear that supply chain colleagues really cared about patients and felt left out of decisions. Using role play, the team was helped to work out how to collaborate better.`,
     impact: `This led to new requirements integrated into Merlin—a system for controlling the whole clinical process. It's now been changed to allow for everybody's voices to be heard, ensuring supply chain considerations are incorporated early in the process, reducing delays and improving outcomes for patients.`,
-    role: 'Human-centered design collaborator with Treehouse Innovation, contributing to workshop design, facilitating empathy-building exercises, and helping translate insights into system-level improvements.',
+    role: 'Served as the design lead for Treehouse Innovation, overseeing the full human-centred design process for AstraZeneca. I guided the insight work, created the workshop flow, facilitated empathy-building activities, and supported leaders in developing system-level changes grounded in real patient and staff experience.',
     featured: false,
     treeHouseAttribution: 'Work delivered in partnership with Treehouse Innovation',
     image: '/attached_assets/astra_1763112872285.png',
+  },
+  {
+    slug: 'novartis-design-thinking-lean',
+    title: 'Novartis: Embedding Design Thinking and Lean at the Design Council',
+    client: 'Novartis',
+    category: 'Capability Building',
+    challenge: 'How can we help leadership teams embed design thinking and lean principles into how they run projects and solve complex organizational challenges?',
+    approach: `In partnership with Treehouse Innovation and Experience Point, a custom training experience was created for Novartis leadership at the Design Council in London. The programme combined design thinking principles with lean methodologies, giving leaders practical frameworks they could apply immediately to their work.
+
+Leaders were given a tour of the Design Council, using it as inspiration to think differently about the challenges they were facing. Rather than just learning theory, participants worked through specific real challenges from their projects, applying design thinking and lean principles in a hands-on, collaborative environment.
+
+The session focused on helping leaders understand how to balance user-centered approaches with operational efficiency, exploring how design thinking could enhance their existing lean practices rather than replace them.`,
+    impact: `Leaders left with practical tools and frameworks they could apply immediately to their projects. The experience at the Design Council provided a tangible example of how design-led thinking shapes innovation at a national level, inspiring participants to bring similar approaches back to their own teams. The combination of design thinking and lean gave leaders a more complete toolkit for tackling complex organizational challenges.`,
+    role: 'Capability building collaborator with Treehouse Innovation and Experience Point, contributing to curriculum design, facilitation, and helping leaders connect design thinking principles with lean methodologies for their specific project challenges.',
+    featured: false,
+    treeHouseAttribution: 'Work delivered in partnership with Treehouse Innovation and Experience Point',
+    image: '/attached_assets/novartis_1763112872286.png',
   },
 ];
 
