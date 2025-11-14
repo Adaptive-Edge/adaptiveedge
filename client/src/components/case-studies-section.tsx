@@ -50,7 +50,7 @@ export default function CaseStudiesSection() {
                       <motion.img
                         src={study.image}
                         alt={study.title}
-                        className={`shadow-lg w-full transition-transform duration-500 group-hover:scale-110 ${index % 2 === 0 ? 'asymmetric-image' : 'asymmetric-image-alt'}`}
+                        className={`shadow-lg w-full h-64 md:h-80 object-cover transition-transform duration-500 group-hover:scale-110 ${index % 2 === 0 ? 'asymmetric-image' : 'asymmetric-image-alt'}`}
                         data-testid={`img-case-study-${study.slug}`}
                       />
                       <div className="absolute inset-0 bg-navy bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300" />
