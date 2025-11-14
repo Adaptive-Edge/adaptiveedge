@@ -134,7 +134,6 @@ function CaseStudyCard({
                 className="w-full h-64 object-cover shadow-lg asymmetric-image transition-transform duration-500 group-hover:scale-110"
                 data-testid={`img-case-study-${study.slug}`}
               />
-              <div className="absolute inset-0 bg-navy bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300" />
             </div>
           )}
 
