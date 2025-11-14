@@ -124,8 +124,7 @@ function CaseStudyCard({
       className="group"
       data-testid={`card-case-study-${study.slug}`}
     >
-      <Link href={`/work/${study.slug}`}>
-        <a className="block">
+      <Link href={`/work/${study.slug}`} className="block">
           {/* Image */}
           {study.image && (
             <div className="relative overflow-hidden mb-6">
@@ -184,7 +183,6 @@ function CaseStudyCard({
               className="ml-2 group-hover:translate-x-2 transition-transform duration-300"
             />
           </div>
-        </a>
       </Link>
     </motion.div>
   );

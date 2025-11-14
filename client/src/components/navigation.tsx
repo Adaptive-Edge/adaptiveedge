@@ -78,19 +78,16 @@ export default function Navigation() {
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-coral transition-all duration-300 group-hover:w-full"></span>
                 </motion.button>
               ) : (
-                <Link key={item.label} href={item.href!}>
-                  <a>
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="text-warm-gray hover:text-coral transition-colors duration-300 relative group cursor-pointer"
-                      data-testid={`nav-${item.label.toLowerCase()}`}
-                    >
-                      {item.label}
-                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-coral transition-all duration-300 group-hover:w-full"></span>
-                    </motion.div>
-                  </a>
+                <Link key={item.label} href={item.href!} data-testid={`nav-${item.label.toLowerCase()}`}>
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="text-warm-gray hover:text-coral transition-colors duration-300 relative group cursor-pointer"
+                  >
+                    {item.label}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-coral transition-all duration-300 group-hover:w-full"></span>
+                  </motion.div>
                 </Link>
               )
             ))}
@@ -134,10 +131,8 @@ export default function Navigation() {
                     {item.label}
                   </button>
                 ) : (
-                  <Link key={item.label} href={item.href!}>
-                    <a className="block w-full text-left text-warm-gray hover:text-coral transition-colors duration-300">
-                      {item.label}
-                    </a>
+                  <Link key={item.label} href={item.href!} className="block w-full text-left text-warm-gray hover:text-coral transition-colors duration-300">
+                    {item.label}
                   </Link>
                 )
               ))}

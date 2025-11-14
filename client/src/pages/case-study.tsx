@@ -33,8 +33,8 @@ export default function CaseStudyPage() {
           <h1 className="text-4xl font-serif font-bold text-navy mb-4">
             Case Study Not Found
           </h1>
-          <Link href="/work">
-            <a className="text-coral hover:underline">← Back to Work</a>
+          <Link href="/work" className="text-coral hover:underline">
+            ← Back to Work
           </Link>
         </div>
       </div>
@@ -54,14 +54,13 @@ export default function CaseStudyPage() {
             transition={{ duration: 0.5 }}
             className="mb-8"
           >
-            <Link href="/work">
-              <a 
-                className="inline-flex items-center text-coral hover:text-navy transition-colors duration-300"
-                data-testid="link-back-to-work"
-              >
-                <ArrowLeft size={20} className="mr-2" />
-                <span>Back to Work</span>
-              </a>
+            <Link 
+              href="/work"
+              className="inline-flex items-center text-coral hover:text-navy transition-colors duration-300"
+              data-testid="link-back-to-work"
+            >
+              <ArrowLeft size={20} className="mr-2" />
+              <span>Back to Work</span>
             </Link>
           </motion.div>
 
@@ -222,13 +221,12 @@ export default function CaseStudyPage() {
             <p className="text-warm-gray mb-6 max-w-2xl mx-auto">
               Let's explore how collaborative strategy and human-centered design can help your organization navigate complexity and unlock new possibilities.
             </p>
-            <Link href="/#contact">
-              <a 
-                className="inline-block bg-coral text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-opacity-90 transition-all duration-300"
-                data-testid="button-get-in-touch"
-              >
-                Get in Touch
-              </a>
+            <Link 
+              href="/#contact"
+              className="inline-block bg-coral text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-opacity-90 transition-all duration-300"
+              data-testid="button-get-in-touch"
+            >
+              Get in Touch
             </Link>
           </motion.div>
         </div>

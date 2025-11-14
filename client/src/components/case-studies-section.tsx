@@ -34,17 +34,16 @@ export default function CaseStudiesSection() {
 
         <div className="space-y-12">
           {caseStudies.map((study, index) => (
-            <Link key={study.slug} href={`/work/${study.slug}`}>
-              <a data-testid={`link-case-study-${study.slug}`}>
-                <motion.div
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                  className={`grid md:grid-cols-2 gap-12 items-center group cursor-pointer ${
-                    index % 2 === 1 ? "md:flex-row-reverse" : ""
-                  }`}
-                >
+            <Link key={study.slug} href={`/work/${study.slug}`} data-testid={`link-case-study-${study.slug}`}>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                viewport={{ once: true }}
+                className={`grid md:grid-cols-2 gap-12 items-center group cursor-pointer ${
+                  index % 2 === 1 ? "md:flex-row-reverse" : ""
+                }`}
+              >
                   <div className={index % 2 === 1 ? "md:order-2" : ""}>
                     <div className="relative overflow-hidden">
                       <motion.img
@@ -84,7 +83,6 @@ export default function CaseStudiesSection() {
                     </div>
                   </div>
                 </motion.div>
-              </a>
             </Link>
           ))}
         </div>
@@ -96,18 +94,19 @@ export default function CaseStudiesSection() {
           viewport={{ once: true }}
           className="text-center mt-16"
         >
-          <Link href="/work">
-            <a data-testid="link-view-all-work">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center bg-coral text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-opacity-90 transition-all duration-300 mb-4"
-              >
-                <span>View All Work</span>
-                <ArrowRight size={20} className="ml-2" />
-              </motion.button>
-            </a>
-          </Link>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link 
+              href="/work" 
+              className="inline-flex items-center bg-coral text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-opacity-90 transition-all duration-300 mb-4"
+              data-testid="link-view-all-work"
+            >
+              <span>View All Work</span>
+              <ArrowRight size={20} className="ml-2" />
+            </Link>
+          </motion.div>
           <p className="text-warm-gray text-sm">
             or{" "}
             <button

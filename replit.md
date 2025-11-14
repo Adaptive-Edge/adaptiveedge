@@ -6,6 +6,11 @@ This is a modern, full-stack web application for Adaptive Edge, a strategy and i
 
 ## Recent Changes
 
+- **November 14, 2025**: Fixed all nested anchor tag issues across the application
+  - Removed invalid `<a>` tag nesting in case studies section, navigation, work page, and case study detail pages
+  - Replaced button-in-link patterns with proper motion.div wrappers to preserve animations
+  - Ensured full accessibility compliance with valid HTML markup
+  - Eliminated all React validateDOMNesting console warnings
 - **August 2, 2025**: Successfully implemented complete email notification system with SendGrid
 - **August 2, 2025**: Contact form now sends email notifications to nathan@adaptiveedge.uk
 - **August 2, 2025**: Added professional branded email templates with coral/navy design
