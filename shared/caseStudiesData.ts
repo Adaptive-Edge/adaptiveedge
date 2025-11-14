@@ -20,7 +20,7 @@ The resources and tools created continue to serve as lasting assets, allowing Fr
     role: 'As project lead for Treehouse Innovation, Nathan directed the design, planning, and delivery of Dialog 2024. Worked closely with senior leaders to shape the strategic storyline, coordinated the creative and facilitation teams, and ensured the final experience translated sophisticated organisational content into clear, immersive sessions for participants.',
     featured: true,
     treeHouseAttribution: 'Work delivered in partnership with Treehouse Innovation',
-    image: '/attached_assets/freudenberg_1763112872285.png',
+    image: '/attached-assets/freudenberg_1763112872285.png',
   },
   {
     slug: 'sandvik-coromant-future-vision',
@@ -35,7 +35,7 @@ This led to a meticulously planned one-and-a-half-day strategic forum in Sweden,
     role: 'Collaborative strategy partner with Treehouse Innovation, contributing to research design, facilitation planning, and helping translate strategic insights into actionable collective vision.',
     featured: true,
     treeHouseAttribution: 'Work delivered in partnership with Treehouse Innovation',
-    image: '/attached_assets/image_1763107247181.png',
+    image: '/attached-assets/image_1763107247181.png',
   },
   {
     slug: 'sky-innovation-programme',
@@ -52,7 +52,7 @@ The programme also featured an assessment of leaders' own team culture of innova
     role: 'Innovation programme collaborator with Treehouse Innovation, contributing to design sprint facilitation, prototype development, and ensuring the programme matched Sky\'s unique culture.',
     featured: true,
     treeHouseAttribution: 'Work delivered in partnership with Treehouse Innovation',
-    image: '/attached_assets/sky-Better-innovation_1763112872286.png',
+    image: '/attached-assets/sky-Better-innovation_1763112872286.png',
   },
   {
     slug: 'sky-creating-facilitators',
@@ -69,7 +69,7 @@ Participants were given the chance to practice running sessions and receive feed
     role: 'Capability building collaborator with Treehouse Innovation, contributing to curriculum design, facilitation training, and developing practical tools for new internal facilitators.',
     featured: false,
     treeHouseAttribution: 'Work delivered in partnership with Treehouse Innovation',
-    image: '/attached_assets/SKy-labs_1763112872286.png',
+    image: '/attached-assets/SKy-labs_1763112872286.png',
   },
   {
     slug: 'sky-people-partners',
@@ -105,7 +105,7 @@ Virtual workshops were run to brainstorm improvements, then 50 people—includin
     role: 'Patient-centered design collaborator with Treehouse Innovation and Experience Point, contributing to research design, facilitating sensitive patient conversations, and translating insights into actionable improvements.',
     featured: true,
     treeHouseAttribution: 'Work delivered in partnership with Treehouse Innovation and Experience Point',
-    image: '/attached_assets/nuvance_1763112911250.png',
+    image: '/attached-assets/nuvance_1763112911250.png',
   },
   {
     slug: 'astrazeneca-human-centered-design',
@@ -122,7 +122,7 @@ Through conversations with supply chain colleagues, the team gathered invaluable
     role: 'Served as the design lead for Treehouse Innovation, overseeing the full human-centred design process for AstraZeneca. I guided the insight work, created the workshop flow, facilitated empathy-building activities, and supported leaders in developing system-level changes grounded in real patient and staff experience.',
     featured: false,
     treeHouseAttribution: 'Work delivered in partnership with Treehouse Innovation',
-    image: '/attached_assets/astra_1763112872285.png',
+    image: '/attached-assets/astra_1763112872285.png',
   },
   {
     slug: 'novartis-design-thinking-lean',
@@ -139,7 +139,7 @@ The session focused on helping leaders understand how to balance user-centered a
     role: 'Capability building collaborator with Treehouse Innovation and Experience Point, contributing to curriculum design, facilitation, and helping leaders connect design thinking principles with lean methodologies for their specific project challenges.',
     featured: false,
     treeHouseAttribution: 'Work delivered in partnership with Treehouse Innovation and Experience Point',
-    image: '/attached_assets/novartis_1763112872286.png',
+    image: '/attached-assets/novartis_1763112872286.png',
   },
 ];
 
