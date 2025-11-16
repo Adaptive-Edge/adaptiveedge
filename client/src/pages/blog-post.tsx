@@ -1,15 +1,16 @@
 import { useParams, Link } from "wouter";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, ExternalLink } from "lucide-react";
-import { blogPosts } from "@shared/blogPostsData";
+import type { BlogPost } from "@shared/schema";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { updatePageMetadata } from "@/lib/seo";
 
 export default function BlogPostPage() {
   const { slug } = useParams();
-  const blogPost = blogPosts.find((post) => post.slug === slug);
+  const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -23,17 +24,37 @@ export default function BlogPostPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    if (blogPost) {
-      updatePageMetadata({
-        title: `${blogPost.title} | Adaptive Edge`,
-        description: blogPost.excerpt,
-        ogTitle: blogPost.title,
-        ogDescription: blogPost.excerpt,
-        ogImage: blogPost.image,
-        ogUrl: `https://adaptiveedge.uk/blog/${blogPost.slug}`,
+    // Fetch blog post from API
+    fetch(`/api/blog-posts/${slug}`)
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        setBlogPost(data);
+        setLoading(false);
+
+        if (data) {
+          updatePageMetadata({
+            title: `${data.title} | Adaptive Edge`,
+            description: data.excerpt,
+            ogTitle: data.title,
+            ogDescription: data.excerpt,
+            ogImage: data.headerImage,
+            ogUrl: `https://adaptiveedge.uk/blog/${data.slug}`,
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Failed to load blog post:', error);
+        setLoading(false);
       });
-    }
-  }, [slug, blogPost]);
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl text-warm-gray">Loading...</div>
+      </div>
+    );
+  }
 
   if (!blogPost) {
     return (

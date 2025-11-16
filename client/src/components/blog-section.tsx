@@ -1,10 +1,28 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Calendar } from "lucide-react";
-import { featuredBlogPosts } from "@shared/blogPostsData";
+import type { BlogPost } from "@shared/schema";
 
 export default function BlogSection() {
-  const blogPosts = featuredBlogPosts;
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch featured blog posts from API
+    fetch('/api/blog-posts')
+      .then(res => res.json())
+      .then(data => {
+        // Filter for featured posts
+        const featured = data.filter((post: BlogPost) => post.featured);
+        setBlogPosts(featured);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Failed to load blog posts:', error);
+        setLoading(false);
+      });
+  }, []);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -14,6 +32,16 @@ export default function BlogSection() {
       year: 'numeric'
     });
   };
+
+  if (loading) {
+    return (
+      <section id="blog" className="py-20 bg-gradient-to-b from-white to-light-coral to-opacity-20">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <div className="text-xl text-warm-gray">Loading blog posts...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="blog" className="py-20 bg-gradient-to-b from-white to-light-coral to-opacity-20">
@@ -43,10 +71,10 @@ export default function BlogSection() {
                 viewport={{ once: true }}
                 className="group cursor-pointer bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
               >
-                {post.image && (
+                {post.headerImage && (
                   <div className="relative overflow-hidden h-48">
                     <motion.img
-                      src={post.image}
+                      src={post.headerImage}
                       alt={post.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       data-testid={`img-blog-post-${post.slug}`}
