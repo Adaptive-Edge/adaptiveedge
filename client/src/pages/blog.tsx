@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
-import { blogPosts } from "@shared/blogPostsData";
-import type { BlogPost } from "@shared/types";
+import type { BlogPost } from "@shared/schema";
 import { BLOG_POST_CATEGORIES } from "@shared/types";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
@@ -11,6 +10,8 @@ import { updatePageMetadata } from "@/lib/seo";
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     updatePageMetadata({
@@ -22,6 +23,18 @@ export default function BlogPage() {
         "Weekly insights on AI, innovation, strategy, and organisational culture from Nathan Waterhouse.",
       ogUrl: "https://adaptiveedge.uk/blog",
     });
+
+    // Fetch blog posts from API
+    fetch('/api/blog-posts')
+      .then(res => res.json())
+      .then(data => {
+        setBlogPosts(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Failed to load blog posts:', error);
+        setLoading(false);
+      });
   }, []);
 
   const categories = ["All", ...BLOG_POST_CATEGORIES];
@@ -81,15 +94,24 @@ export default function BlogPage() {
             ))}
           </motion.div>
 
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <div className="text-xl text-warm-gray">Loading blog posts...</div>
+            </div>
+          )}
+
           {/* Blog Posts Grid */}
-          <div className="grid md:grid-cols-2 gap-8">
-            {filteredBlogPosts.map((post, index) => (
-              <BlogPostCard key={post.slug} post={post} index={index} />
-            ))}
-          </div>
+          {!loading && (
+            <div className="grid md:grid-cols-2 gap-8">
+              {filteredBlogPosts.map((post, index) => (
+                <BlogPostCard key={post.slug} post={post} index={index} />
+              ))}
+            </div>
+          )}
 
           {/* No Results */}
-          {filteredBlogPosts.length === 0 && (
+          {!loading && filteredBlogPosts.length === 0 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -134,10 +156,10 @@ function BlogPostCard({
     >
       <Link href={`/blog/${post.slug}`} className="block">
           {/* Image */}
-          {post.image && (
+          {post.headerImage && (
             <div className="relative overflow-hidden mb-6">
               <motion.img
-                src={post.image}
+                src={post.headerImage}
                 alt={post.title}
                 className="w-full h-64 object-cover shadow-lg asymmetric-image transition-transform duration-500 group-hover:scale-110"
                 data-testid={`img-blog-post-${post.slug}`}
