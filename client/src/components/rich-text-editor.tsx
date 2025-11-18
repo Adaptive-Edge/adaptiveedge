@@ -1,326 +1,234 @@
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Image from '@tiptap/extension-image';
-import Link from '@tiptap/extension-link';
-import Placeholder from '@tiptap/extension-placeholder';
-import Underline from '@tiptap/extension-underline';
-import {
-  Bold,
-  Italic,
-  Underline as UnderlineIcon,
-  List,
-  ListOrdered,
-  Heading2,
-  Heading3,
-  Quote,
-  Undo,
-  Redo,
-  ImagePlus,
-  Link as LinkIcon
-} from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import { Bold, Italic, List, ListOrdered, Image, Link, Quote, Code } from 'lucide-react';
 
 interface RichTextEditorProps {
-  content: string;
-  onChange: (content: string) => void;
+  value: string;
+  onChange: (value: string) => void;
   placeholder?: string;
 }
 
-export default function RichTextEditor({ content, onChange, placeholder }: RichTextEditorProps) {
-  const [imageUrl, setImageUrl] = useState('');
-  const [showImageDialog, setShowImageDialog] = useState(false);
+export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+  const editorRef = useRef<HTMLDivElement>(null);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
-  const [showLinkDialog, setShowLinkDialog] = useState(false);
-  const [uploading, setUploading] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Image.configure({
-        inline: true,
-        allowBase64: true,
-      }),
-      Link.configure({
-        openOnClick: false,
-        HTMLAttributes: {
-          class: 'text-coral underline',
-        },
-      }),
-      Placeholder.configure({
-        placeholder: placeholder || 'Start writing your blog post...',
-      }),
-    ],
-    content,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
-    },
-    editorProps: {
-      attributes: {
-        class: 'prose prose-lg max-w-none focus:outline-none min-h-[400px] px-4 py-3',
-      },
-    },
-  });
-
-  const handleImageUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-      const response = await fetch('/api/blog-images', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (data.success && editor) {
-        editor.chain().focus().setImage({ src: data.url }).run();
-      }
-    } catch (error) {
-      console.error('Failed to upload image:', error);
-      alert('Failed to upload image');
-    } finally {
-      setUploading(false);
+  useEffect(() => {
+    if (editorRef.current && editorRef.current.innerHTML !== value) {
+      editorRef.current.innerHTML = value || '';
     }
-  }, [editor]);
+  }, [value]);
 
-  const addImageByUrl = useCallback(() => {
-    if (imageUrl && editor) {
-      editor.chain().focus().setImage({ src: imageUrl }).run();
-      setImageUrl('');
-      setShowImageDialog(false);
+  const execCommand = (command: string, value: string | undefined = undefined) => {
+    document.execCommand(command, false, value);
+    editorRef.current?.focus();
+    handleChange();
+  };
+
+  const handleChange = () => {
+    if (editorRef.current) {
+      const content = editorRef.current.innerHTML;
+      onChange(content);
     }
-  }, [editor, imageUrl]);
+  };
 
-  const setLink = useCallback(() => {
-    if (!editor) return;
+  const insertList = (ordered: boolean) => {
+    const selection = window.getSelection();
+    if (!selection || !editorRef.current) return;
 
-    if (linkUrl) {
-      editor.chain().focus().setLink({ href: linkUrl }).run();
+    const range = selection.getRangeAt(0);
+    const listType = ordered ? 'ol' : 'ul';
+    const list = document.createElement(listType);
+    const listItem = document.createElement('li');
+    
+    // Get selected text or use placeholder
+    const selectedText = selection.toString() || 'List item';
+    listItem.textContent = selectedText;
+    list.appendChild(listItem);
+
+    // Delete selected text and insert list
+    range.deleteContents();
+    range.insertNode(list);
+    
+    // Move cursor to end of list item
+    range.setStartAfter(listItem);
+    range.setEndAfter(listItem);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    
+    handleChange();
+  };
+
+  const insertLink = () => {
+    const selection = window.getSelection();
+    if (selection && selection.toString()) {
+      setIsLinkModalOpen(true);
     } else {
-      editor.chain().focus().unsetLink().run();
+      alert('Please select some text first');
     }
-    setLinkUrl('');
-    setShowLinkDialog(false);
-  }, [editor, linkUrl]);
+  };
 
-  if (!editor) {
-    return null;
-  }
+  const confirmLink = () => {
+    if (linkUrl) {
+      execCommand('createLink', linkUrl);
+      setLinkUrl('');
+      setIsLinkModalOpen(false);
+    }
+  };
+
+  const insertImage = () => {
+    setIsImageModalOpen(true);
+  };
+
+  const confirmImage = () => {
+    if (imageUrl) {
+      execCommand('insertImage', imageUrl);
+      setImageUrl('');
+      setIsImageModalOpen(false);
+    }
+  };
+
+  const ToolbarButton = ({ onClick, title, children }: { onClick: () => void; title: string; children: React.ReactNode }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      className="p-2 hover:bg-gray-100 rounded transition-colors"
+    >
+      {children}
+    </button>
+  );
 
   return (
     <div className="border border-gray-300 rounded-lg overflow-hidden">
       {/* Toolbar */}
-      <div className="bg-gray-50 border-b border-gray-300 p-2 flex flex-wrap gap-1">
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-gray-300' : ''}`}
-          title="Bold"
-        >
+      <div className="bg-gray-50 border-b border-gray-300 p-2 flex items-center gap-1 flex-wrap">
+        <ToolbarButton onClick={() => execCommand('bold')} title="Bold">
           <Bold size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-gray-300' : ''}`}
-          title="Italic"
-        >
+        </ToolbarButton>
+        <ToolbarButton onClick={() => execCommand('italic')} title="Italic">
           <Italic size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('underline') ? 'bg-gray-300' : ''}`}
-          title="Underline"
-        >
-          <UnderlineIcon size={18} />
-        </button>
-
-        <div className="w-px bg-gray-300 mx-1" />
-
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-300' : ''}`}
-          title="Heading 2"
-        >
-          <Heading2 size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('heading', { level: 3 }) ? 'bg-gray-300' : ''}`}
-          title="Heading 3"
-        >
-          <Heading3 size={18} />
-        </button>
-
-        <div className="w-px bg-gray-300 mx-1" />
-
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-gray-300' : ''}`}
-          title="Bullet List"
-        >
+        </ToolbarButton>
+        <div className="w-px h-6 bg-gray-300 mx-1" />
+        <ToolbarButton onClick={() => insertList(false)} title="Bullet List">
           <List size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('orderedList') ? 'bg-gray-300' : ''}`}
-          title="Numbered List"
-        >
+        </ToolbarButton>
+        <ToolbarButton onClick={() => insertList(true)} title="Numbered List">
           <ListOrdered size={18} />
-        </button>
-
-        <div className="w-px bg-gray-300 mx-1" />
-
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('blockquote') ? 'bg-gray-300' : ''}`}
-          title="Quote"
-        >
+        </ToolbarButton>
+        <div className="w-px h-6 bg-gray-300 mx-1" />
+        <ToolbarButton onClick={() => execCommand('formatBlock', '<blockquote>')} title="Quote">
           <Quote size={18} />
-        </button>
-
-        <div className="w-px bg-gray-300 mx-1" />
-
-        <label className="p-2 rounded hover:bg-gray-200 cursor-pointer" title="Upload Image">
-          <ImagePlus size={18} />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="hidden"
-            disabled={uploading}
-          />
-        </label>
-
-        <button
-          type="button"
-          onClick={() => setShowImageDialog(true)}
-          className="p-2 rounded hover:bg-gray-200"
-          title="Add Image URL"
+        </ToolbarButton>
+        <ToolbarButton onClick={() => execCommand('formatBlock', '<pre>')} title="Code Block">
+          <Code size={18} />
+        </ToolbarButton>
+        <div className="w-px h-6 bg-gray-300 mx-1" />
+        <ToolbarButton onClick={insertLink} title="Insert Link">
+          <Link size={18} />
+        </ToolbarButton>
+        <ToolbarButton onClick={insertImage} title="Insert Image">
+          <Image size={18} />
+        </ToolbarButton>
+        <div className="w-px h-6 bg-gray-300 mx-1" />
+        <select
+          onChange={(e) => execCommand('formatBlock', e.target.value)}
+          className="px-2 py-1 text-sm border border-gray-300 rounded"
+          defaultValue=""
         >
-          <ImagePlus size={18} />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setShowLinkDialog(true)}
-          className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-gray-300' : ''}`}
-          title="Add Link"
-        >
-          <LinkIcon size={18} />
-        </button>
-
-        <div className="w-px bg-gray-300 mx-1" />
-
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().undo()}
-          className="p-2 rounded hover:bg-gray-200 disabled:opacity-50"
-          title="Undo"
-        >
-          <Undo size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().redo()}
-          className="p-2 rounded hover:bg-gray-200 disabled:opacity-50"
-          title="Redo"
-        >
-          <Redo size={18} />
-        </button>
+          <option value="" disabled>Heading</option>
+          <option value="<p>">Normal</option>
+          <option value="<h1>">Heading 1</option>
+          <option value="<h2>">Heading 2</option>
+          <option value="<h3>">Heading 3</option>
+        </select>
       </div>
 
       {/* Editor */}
-      <EditorContent editor={editor} />
+      <div
+        ref={editorRef}
+        contentEditable
+        className="w-full px-4 py-3 min-h-[300px] focus:outline-none prose prose-sm max-w-none"
+        onInput={handleChange}
+        onBlur={handleChange}
+        dangerouslySetInnerHTML={{ __html: value || `<p>${placeholder || 'Start writing...'}</p>` }}
+        style={{
+          minHeight: '300px',
+          maxHeight: '600px',
+          overflowY: 'auto'
+        }}
+      />
 
-      {/* Image URL Dialog */}
-      {showImageDialog && (
+      {/* Link Modal */}
+      {isLinkModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Add Image URL</h3>
-            <input
-              type="url"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="https://example.com/image.jpg"
-              className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
-              autoFocus
-            />
-            <div className="flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setShowImageDialog(false);
-                  setImageUrl('');
-                }}
-                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={addImageByUrl}
-                className="px-4 py-2 bg-coral text-white rounded hover:bg-opacity-90"
-              >
-                Add Image
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Link Dialog */}
-      {showLinkDialog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
-            <h3 className="text-lg font-bold mb-4">Add Link</h3>
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h3 className="text-lg font-semibold mb-4">Insert Link</h3>
             <input
               type="url"
               value={linkUrl}
               onChange={(e) => setLinkUrl(e.target.value)}
               placeholder="https://example.com"
-              className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+              className="w-full px-3 py-2 border border-gray-300 rounded mb-4"
               autoFocus
             />
             <div className="flex justify-end gap-2">
               <button
                 type="button"
                 onClick={() => {
-                  setShowLinkDialog(false);
+                  setIsLinkModalOpen(false);
                   setLinkUrl('');
                 }}
-                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+                className="px-4 py-2 text-gray-600 hover:text-gray-800"
               >
                 Cancel
               </button>
               <button
                 type="button"
-                onClick={setLink}
+                onClick={confirmLink}
                 className="px-4 py-2 bg-coral text-white rounded hover:bg-opacity-90"
               >
-                Add Link
+                Insert
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {uploading && (
-        <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center">
-          <div className="text-lg">Uploading image...</div>
+      {/* Image Modal */}
+      {isImageModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h3 className="text-lg font-semibold mb-4">Insert Image</h3>
+            <input
+              type="url"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="https://example.com/image.jpg"
+              className="w-full px-3 py-2 border border-gray-300 rounded mb-4"
+              autoFocus
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsImageModalOpen(false);
+                  setImageUrl('');
+                }}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmImage}
+                className="px-4 py-2 bg-coral text-white rounded hover:bg-opacity-90"
+              >
+                Insert
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
