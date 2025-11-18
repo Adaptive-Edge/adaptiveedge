@@ -35,7 +35,7 @@ export default function ToolsSection() {
       title: "Power Canvas",
       description: "A tool that helps spot power dynamics issues based on the structure of your organisation, enabling more effective collaboration and decision-making.",
       color: "bg-navy",
-      link: "https://power.adaptiveedge.uk/",
+      link: "/tools/powercanvas",
     },
     {
       icon: GitBranch,

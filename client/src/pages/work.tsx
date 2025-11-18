@@ -1,16 +1,40 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
-import { caseStudies } from "@shared/caseStudiesData";
-import type { CaseStudy } from "@shared/types";
-import { CASE_STUDY_CATEGORIES } from "@shared/types";
+import { ArrowRight } from "lucide-react";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
-import { ArrowRight } from "lucide-react";
 import { updatePageMetadata } from "@/lib/seo";
+
+interface CaseStudy {
+  id: string;
+  slug: string;
+  title: string;
+  client: string;
+  category: string;
+  challenge: string;
+  approach: string;
+  impact: string;
+  roleDescription: string;
+  featured: boolean;
+  treeHouseAttribution: string;
+  image?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+const CASE_STUDY_CATEGORIES = [
+  "Strategic Transformation",
+  "Innovation & Design", 
+  "Capability Building",
+  "Culture & Change"
+];
 
 export default function WorkPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     updatePageMetadata({
@@ -24,12 +48,73 @@ export default function WorkPage() {
     });
   }, []);
 
+  useEffect(() => {
+    const fetchCaseStudies = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/case-studies");
+        
+        if (response.ok) {
+          const data = await response.json();
+          setCaseStudies(data);
+        } else {
+          setError(true);
+        }
+      } catch (err) {
+        console.error("Error fetching case studies:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCaseStudies();
+  }, []);
+
   const categories = ["All", ...CASE_STUDY_CATEGORIES];
 
   const filteredCaseStudies =
     selectedCategory === "All"
       ? caseStudies
       : caseStudies.filter((study) => study.category === selectedCategory);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navigation />
+        <section className="pt-32 pb-20">
+          <div className="max-w-6xl mx-auto px-6 text-center">
+            <div className="inline-block w-8 h-8 border-4 border-coral border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-warm-gray">Loading case studies...</p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navigation />
+        <section className="pt-32 pb-20">
+          <div className="max-w-6xl mx-auto px-6 text-center">
+            <h1 className="text-4xl font-serif font-bold text-navy mb-4">
+              Unable to Load Case Studies
+            </h1>
+            <p className="text-warm-gray mb-6">
+              There was an error loading our work. Please try again later.
+            </p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="text-coral hover:underline"
+            >
+              Refresh Page
+            </button>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -70,7 +155,7 @@ export default function WorkPage() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                data-testid={`button-filter-${category.toLowerCase().replace(/\s+/g, '-')}`}
+                data-testid={`button-filter-${category.toLowerCase().replace(/\s+/g, "-")}`}
                 className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === category
                     ? "bg-coral text-white shadow-lg scale-105"
@@ -90,7 +175,7 @@ export default function WorkPage() {
           </div>
 
           {/* No Results */}
-          {filteredCaseStudies.length === 0 && (
+          {filteredCaseStudies.length === 0 && !loading && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

@@ -13,6 +13,7 @@ import BlogPostPage from "@/pages/blog-post";
 import AdminLogin from "@/pages/admin-login";
 import AdminBlogList from "@/pages/admin-blog-list";
 import AdminBlogEditor from "@/pages/admin-blog-editor";
+import AdminCaseStudyEditor from "@/pages/admin-case-study-editor";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -27,6 +28,8 @@ function Router() {
       <Route path="/admin/blog" component={AdminBlogList} />
       <Route path="/admin/blog/new" component={AdminBlogEditor} />
       <Route path="/admin/blog/edit/:id" component={AdminBlogEditor} />
+      <Route path="/admin/case-study/new" component={AdminCaseStudyEditor} />
+      <Route path="/admin/case-study/edit/:id" component={AdminCaseStudyEditor} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { Plus, Edit, Trash2, LogOut, Eye } from 'lucide-react';
-import type { BlogPost } from '@shared/schema';
+import type { BlogPost, CaseStudy } from '@shared/schema';
 
 export default function AdminBlogList() {
   const [, setLocation] = useLocation();
   const { isAuthenticated, logout } = useAdminAuth();
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
@@ -17,6 +18,7 @@ export default function AdminBlogList() {
       return;
     }
     loadPosts();
+    loadCaseStudies();
   }, [isAuthenticated, setLocation]);
 
   const loadPosts = async () => {
@@ -31,6 +33,17 @@ export default function AdminBlogList() {
       console.error('Failed to load blog posts:', error);
     } finally {
       setLoading(false);
+    }
+  };
+  const loadCaseStudies = async () => {
+    try {
+      const response = await fetch("/api/case-studies");
+      if (response.ok) {
+        const data = await response.json();
+        setCaseStudies(data);
+      }
+    } catch (error) {
+      console.error("Failed to load case studies:", error);
     }
   };
 
@@ -76,8 +89,8 @@ export default function AdminBlogList() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-serif font-bold text-navy">Blog Management</h1>
-            <p className="text-sm text-warm-gray">Manage your blog posts</p>
+            <h1 className="text-2xl font-serif font-bold text-navy">Content Management</h1>
+            <p className="text-sm text-warm-gray">Manage blog posts and case studies</p>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -93,6 +106,13 @@ export default function AdminBlogList() {
             >
               <Plus size={18} />
               New Post
+            </button>
+            <button
+              onClick={() => setLocation("/admin/case-study/new")}
+              className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300"
+            >
+              <Plus size={18} />
+              New Case Study
             </button>
             <button
               onClick={handleLogout}
@@ -211,6 +231,59 @@ export default function AdminBlogList() {
         </div>
       </div>
 
+n      {/* Case Studies Section */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-serif font-bold text-navy">Case Studies</h2>
+        </div>
+        {caseStudies.length > 0 ? (
+          <div className="space-y-4">
+            {caseStudies.map((caseStudy) => (
+              <div key={caseStudy.id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-semibold text-navy">{caseStudy.title}</h3>
+                      {caseStudy.featured && (
+                        <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">Featured</span>
+                      )}
+                      {caseStudy.treeHouseAttribution && (
+                        <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">TreeHouse</span>
+                      )}
+                    </div>
+                    <p className="text-sm text-warm-gray mt-1">{caseStudy.client} • {caseStudy.category}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => window.open(`/work/${caseStudy.slug}`, "_blank")}
+                      className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                    >
+                      View
+                    </button>
+                    <button
+                      onClick={() => setLocation(`/admin/case-study/edit/${caseStudy.id}`)}
+                      className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+            <h3 className="text-lg font-semibold text-navy mb-2">No case studies yet</h3>
+            <p className="text-warm-gray mb-4">Create your first case study to get started</p>
+            <button
+              onClick={() => setLocation("/admin/case-study/new")}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Create Case Study
+            </button>
+          </div>
+        )}
+      </div>
       {/* Delete Confirmation Dialog */}
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

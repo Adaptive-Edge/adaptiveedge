@@ -156,10 +156,10 @@ function BlogPostCard({
     >
       <Link href={`/blog/${post.slug}`} className="block">
           {/* Image */}
-          {post.headerImage && (
+          {post.image && (
             <div className="relative overflow-hidden mb-6">
               <motion.img
-                src={post.headerImage}
+                src={post.image}
                 alt={post.title}
                 className="w-full h-64 object-cover shadow-lg asymmetric-image transition-transform duration-500 group-hover:scale-110"
                 data-testid={`img-blog-post-${post.slug}`}

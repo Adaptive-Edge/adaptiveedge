@@ -147,7 +147,7 @@ export default function BlogPostPage() {
               <img
                 src={blogPost.image}
                 alt={blogPost.title}
-                className="w-full h-[400px] object-cover shadow-lg asymmetric-image"
+                className="w-full h-[476px] object-cover shadow-lg asymmetric-image"
                 data-testid="img-blog-post-hero"
               />
             </motion.div>
@@ -179,7 +179,7 @@ export default function BlogPostPage() {
               className="prose prose-lg max-w-none text-warm-gray leading-relaxed space-y-4 whitespace-pre-line"
               data-testid="text-content"
             >
-              {blogPost.content}
+              <div dangerouslySetInnerHTML={{ __html: blogPost.content }} />
             </div>
           </motion.section>
 

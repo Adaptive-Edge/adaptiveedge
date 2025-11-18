@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'wouter';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
-import RichTextEditor from '@/components/rich-text-editor';
 import { ArrowLeft, Save, Eye, Upload } from 'lucide-react';
 import { BLOG_POST_CATEGORIES } from '@shared/types';
+import RichTextEditor from "@/components/rich-text-editor";
 
 export default function AdminBlogEditor() {
   const { id } = useParams();
@@ -41,7 +41,7 @@ export default function AdminBlogEditor() {
   const loadBlogPost = async (postId: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/blog-posts/${postId}`);
+      const response = await fetch(`/api/blog-posts/by-id/${postId}`);
       if (response.ok) {
         const post = await response.json();
         setFormData({
@@ -52,7 +52,7 @@ export default function AdminBlogEditor() {
           category: post.category,
           excerpt: post.excerpt,
           content: post.content,
-          headerImage: post.headerImage || '',
+          headerImage: post.image || '',
           linkedinUrl: post.linkedinUrl || '',
           featured: post.featured,
         });
@@ -109,10 +109,7 @@ export default function AdminBlogEditor() {
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          date: new Date(formData.date).toISOString(),
-        }),
+body: JSON.stringify({          title: formData.title,          slug: formData.slug,          excerpt: formData.excerpt,          content: formData.content,          author: formData.author,          category: formData.category,          image: formData.headerImage,          linkedinUrl: formData.linkedinUrl,          featured: formData.featured,          date: formData.date,        }),
       });
 
       if (response.ok) {
@@ -269,7 +266,7 @@ export default function AdminBlogEditor() {
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent"
                   required
-                  pattern="[a-z0-9-]+"
+                  pattern="[a-z0-9\-]+"
                 />
               </div>
 
@@ -365,7 +362,7 @@ export default function AdminBlogEditor() {
                 Content *
               </label>
               <RichTextEditor
-                content={formData.content}
+                value={formData.content}
                 onChange={(content) => setFormData({ ...formData, content })}
                 placeholder="Write your blog post content here..."
               />

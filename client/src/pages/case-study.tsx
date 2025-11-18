@@ -1,41 +1,100 @@
 import { useParams, Link } from "wouter";
 import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink } from "lucide-react";
-import { caseStudies } from "@shared/caseStudiesData";
+import { useState, useEffect } from "react";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
-import { useEffect } from "react";
 import { updatePageMetadata } from "@/lib/seo";
+
+interface CaseStudy {
+  id: string;
+  slug: string;
+  title: string;
+  client: string;
+  category: string;
+  challenge: string;
+  approach: string;
+  impact: string;
+  roleDescription: string;
+  featured: boolean;
+  treeHouseAttribution: string;
+  image?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function CaseStudyPage() {
   const { slug } = useParams();
-  const caseStudy = caseStudies.find((study) => study.slug === slug);
+  const [caseStudy, setCaseStudy] = useState<CaseStudy | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    
-    if (caseStudy) {
-      updatePageMetadata({
-        title: `${caseStudy.title} | Adaptive Edge`,
-        description: caseStudy.challenge,
-        ogTitle: `${caseStudy.title} - ${caseStudy.client}`,
-        ogDescription: caseStudy.challenge,
-        ogImage: caseStudy.image,
-        ogUrl: `https://adaptiveedge.uk/work/${caseStudy.slug}`,
-      });
-    }
-  }, [slug, caseStudy]);
+    const fetchCaseStudy = async () => {
+      if (!slug) return;
+      
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/case-studies/${slug}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setCaseStudy(data);
+          
+          // Update page metadata
+          updatePageMetadata({
+            title: `${data.title} | Adaptive Edge`,
+            description: data.challenge,
+            ogTitle: `${data.title} - ${data.client}`,
+            ogDescription: data.challenge,
+            ogImage: data.image,
+            ogUrl: `https://adaptiveedge.uk/work/${data.slug}`,
+          });
+        } else {
+          setError(true);
+        }
+      } catch (err) {
+        console.error("Error fetching case study:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!caseStudy) {
+    fetchCaseStudy();
+    window.scrollTo(0, 0);
+  }, [slug]);
+
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-serif font-bold text-navy mb-4">
-            Case Study Not Found
-          </h1>
-          <Link href="/work" className="text-coral hover:underline">
-            ← Back to Work
-          </Link>
+      <div className="min-h-screen bg-white">
+        <Navigation />
+        <div className="pt-32 pb-20 flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block w-8 h-8 border-4 border-coral border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-warm-gray">Loading case study...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !caseStudy) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navigation />
+        <div className="pt-32 pb-20 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl font-serif font-bold text-navy mb-4">
+              Case Study Not Found
+            </h1>
+            <p className="text-warm-gray mb-6">
+              The case study you're looking for doesn't exist or has been removed.
+            </p>
+            <Link href="/work" className="text-coral hover:underline">
+              ← Back to Work
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -197,7 +256,7 @@ export default function CaseStudyPage() {
               className="text-warm-gray mb-6 leading-relaxed"
               data-testid="text-role-content"
             >
-              {caseStudy.role}
+              {caseStudy.roleDescription}
             </p>
             <p 
               className="text-sm text-warm-gray italic flex items-center gap-2"
